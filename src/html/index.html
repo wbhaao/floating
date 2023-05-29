@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="../css/index.css" />
+  </head>
+  <body>
+    <span style="display: block" id="container"></span>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+      var socket = io();
+
+      var container = document.querySelector("#container");
+      var form = document.getElementById("form");
+      var input = document.getElementById("input");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit("chat message", input.value);
+          input.value = "";
+        }
+      });
+
+      socket.on("load_chat", function (msg) {
+        console.log(msg.list.length);
+        for (let index = 0; index < msg.list.length; index++) {
+          console.log(msg.list[index]);
+        }
+      });
+
+      socket.on("chat message", function (msg) {
+        var item = document.createElement("div");
+        var rand1 = Math.floor(Math.random() * 100 + 150);
+        var rand2 = Math.floor(Math.random() * 100 + 150);
+        var rand3 = Math.floor(Math.random() * 100 + 150);
+
+        var pos1 = Math.floor(Math.random() * 70);
+        var pos2 = Math.floor(Math.random() * 80);
+
+        item.style.textAlign = "center";
+        item.textContent = msg;
+        item.style.padding = "15px";
+        item.style.fontSize = "25px";
+        item.style.backgroundColor = `rgba(${rand1}, ${rand2}, ${rand3}, ${1})`;
+        item.style.position = "absolute";
+        item.style.top = `${pos1}%`;
+        item.style.left = `${pos2}%`;
+
+        container.appendChild(item);
+        socket.emit("save message", item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
+</html>
