@@ -29,7 +29,18 @@
       socket.on("load_chat", function (msg) {
         console.log(msg.list.length);
         for (let index = 0; index < msg.list.length; index++) {
-          console.log(msg.list[index]);
+          var item = document.createElement("div");
+          item.style.textAlign = "center";
+          item.style.padding = "15px";
+          item.style.fontSize = "25px";
+          item.style.position = "absolute";
+          item.style.backgroundColor = `rgba(${msg.list[index].color1}, ${
+            msg.list[index].color2
+          }, ${msg.list[index].color3}, ${1})`;
+          item.textContent = msg.list[index].des;
+          item.style.top = `${msg.list[index].posY}%`;
+          item.style.left = `${msg.list[index].posX}%`;
+          container.appendChild(item);
         }
       });
 
@@ -39,21 +50,22 @@
         var rand2 = Math.floor(Math.random() * 100 + 150);
         var rand3 = Math.floor(Math.random() * 100 + 150);
 
-        var pos1 = Math.floor(Math.random() * 70);
-        var pos2 = Math.floor(Math.random() * 80);
+        var pos1 = Math.floor(Math.random() * 60);
+        var pos2 = Math.floor(Math.random() * 60);
 
         item.style.textAlign = "center";
-        item.textContent = msg;
         item.style.padding = "15px";
         item.style.fontSize = "25px";
-        item.style.backgroundColor = `rgba(${rand1}, ${rand2}, ${rand3}, ${1})`;
         item.style.position = "absolute";
+
+        item.style.backgroundColor = `rgba(${rand1}, ${rand2}, ${rand3}, ${1})`;
+        item.textContent = msg;
         item.style.top = `${pos1}%`;
         item.style.left = `${pos2}%`;
 
         container.appendChild(item);
-        // socket.emit("save message", item);
         window.scrollTo(0, document.body.scrollHeight);
+        socket.emit("save message", [rand1, rand2, rand3, pos1, pos2, msg]);
       });
     </script>
   </body>

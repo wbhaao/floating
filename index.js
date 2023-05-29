@@ -28,9 +28,17 @@ io.on("connection", (socket) => {
   });
   // msg를 보내준다
   socket.on("save message", function (msg) {
+    st = {
+      color1: msg[0],
+      color2: msg[1],
+      color3: msg[2],
+      posY: msg[3],
+      posX: msg[4],
+      des: msg[5],
+    };
     filed = JSON.parse(fs.readFileSync("src/base/file.json", "utf-8"));
-    filed.list[filed.list.length] = msg;
-    fs.writeFileSync("./src/base/file.json", filed);
+    filed.list[filed.list.length] = st;
+    fs.writeFileSync("./src/base/file.json", JSON.stringify(filed));
   });
   socket.on("disconnect", function () {
     console.log("탈퇴");
