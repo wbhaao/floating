@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
     io.emit("chat message", msg);
   });
-  // msg를 보내준다
+  // msg를 보내준다ㄴ
   socket.on("save message", function (msg) {
     st = {
       color1: msg[0],
